@@ -1,0 +1,23 @@
+{
+  "name": "rjmain-fe",
+  "version": "1.0.0",
+  "description": "rjmain-fe",
+  "main": "src/index.js",
+  "scripts": {
+    "publ": "npm publish --registry=http://192.168.0.40:8081/repository/npm-releases/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://gitlab.rongji.com/zhuanglw/rjmain-fe.git"
+  },
+  "files": [
+    "lib",
+    "src",
+    "packages"
+  ],
+  "keywords": [
+    "rjmain"
+  ],
+  "author": "",
+  "license": "ISC"
+}
