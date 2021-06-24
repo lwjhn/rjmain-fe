@@ -8,7 +8,7 @@ stages:
 build-project:
   stage: build
   script:
-  - yarn install --no-lockfile
+#  - yarn install --no-lockfile
   - yarn run publ
   tags:
   - node
