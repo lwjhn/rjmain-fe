@@ -1,6 +1,6 @@
 {
   "name": "rjmain-fe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "rjmain-fe",
   "main": "src/index.js",
   "scripts": {
