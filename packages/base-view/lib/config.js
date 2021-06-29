@@ -1,5 +1,6 @@
 export default {
     url: '',
+    categoryUrl: '',
     selection: true,
     category: [/*{
                     expression: 'year(eventTime)',

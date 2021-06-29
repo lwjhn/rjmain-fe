@@ -1,5 +1,5 @@
 {
-  "name": "rjmain-fe",
+  "name": "@rongji/rjmain-fe",
   "version": "1.0.1",
   "description": "rjmain-fe",
   "main": "src/index.js",
