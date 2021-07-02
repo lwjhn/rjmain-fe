@@ -307,13 +307,7 @@ export default {
       })
     },
     refresh(jumpToFirst) {
-      //this.$refs.refPagination.refresh(jumpToFirst);
-      let $this = this.$refs.refPagination;
-      if (!jumpToFirst || $this.pagination.currentPage === 1) {
-        $this.fetchTableData()
-      } else {
-        $this.pagination.currentPage = 1;
-      }
+      this.$refs.refPagination.refresh(jumpToFirst);
     },
     init(config) {
       if (!config)
