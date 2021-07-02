@@ -37,6 +37,7 @@
             end-placeholder="结束日期"
         >
         </el-date-picker>
+
         <el-input
             v-else
             v-model="item.value" @input="forceUpdate()"
@@ -139,8 +140,9 @@ export default {
         fields,
         order: [`${cat.alias} ${cat.desc ? 'DESC' : 'ASC'}`],
         limit: [0, 1000],
-        group: [cat.alias]
+        group: fields[0]
       }
+      this.setCategoryCriteria(request, this.lastCategory)
       this.beforeRequest(request, this.lastCategory, true)
 
       if (this.cancelCategory && typeof this.cancelCategory.cancel === 'function')     // 取消上一次请求
@@ -247,8 +249,26 @@ export default {
           value: criteria.value
         }
       }
+      this.setCategoryCriteria(query, this.lastCategory)
       this.beforeRequest(query, this.lastCategory)
       return query
+    },
+    setCategoryCriteria(query, categories) {
+      if(!categories) return;
+      categories.forEach(item => {
+        let {expression, value} = item
+        if (typeof item.criteria === 'function' && ({
+          expression,
+          value
+        } = item.criteria(item)) && expression && /\w/.test(expression)) {
+
+        } else if((expression=item.expression) && /\w/.test(expression)){
+          expression = `${ item.expression } ${ item.value === null ? 'IS NULL' : '= ?'}`
+          value = item.value
+        } else
+          return
+        $rj.sql(query, expression, value)
+      })
     },
     fetchTableData($this) {
       if (!this.url) return
@@ -287,7 +307,13 @@ export default {
       })
     },
     refresh(jumpToFirst) {
-      this.$refs.refPagination.refresh(jumpToFirst);
+      //this.$refs.refPagination.refresh(jumpToFirst);
+      let $this = this.$refs.refPagination;
+      if (!jumpToFirst || $this.pagination.currentPage === 1) {
+        $this.fetchTableData()
+      } else {
+        $this.pagination.currentPage = 1;
+      }
     },
     init(config) {
       if (!config)

@@ -7,7 +7,8 @@ export default {
                     //value:[],   //expresion参数
                     label: '事发时间',
                     width: '80px',
-                    desc: true
+                    desc: true,
+                    //criteria(item){}  //可选
         }*/],
     columns: [/*{
                     expression: 'eventTime',
@@ -22,12 +23,12 @@ export default {
             label: '打印',
             title: '打印',
             type: 'primary',
-            handle:()=>{}
+            handle(){}
     }*/],
     search: [/*{
                 label: '事发时间',
-                type: 'date',
-                criteria: (item) => {
+                type: 'date',   //date, number, boolean
+                criteria(item){
                     return item.value ? {
                         expression: `eventTime>=?${item.length > 1 ? ' AND eventTime<=?' : ''}`,
                         value: item.value
@@ -38,10 +39,10 @@ export default {
                 expression: 'reportUnitName = ?',
     }*/],
     keyword: '', //eventTime LIKE ?
-    rowClick: () => {
+    rowClick() {
     },
-    beforeRequest: (query, category, isCategory) => {
+    beforeRequest(query, category, isCategory) {
     },
-    afterRequest: (request, response, isCategory) => {
+    afterRequest(request, response, isCategory) {
     }
 }
