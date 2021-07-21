@@ -6,7 +6,7 @@ export default {
                     expression: 'year(eventTime)',
                     //value:[],   //expresion参数
                     label: '事发时间',
-                    width: '80px',
+                    width: '80px', //minWidth: 180,
                     desc: true,
                     //criteria(item){}  //可选
         }*/],
@@ -14,7 +14,7 @@ export default {
                     expression: 'eventTime',
                     label: '事发时间',
                     width: '180',
-                    sortable: true,
+                    sortable: true, //默认排序配置为 DESC ASC
                     format: function (val) {},
                     alias: '',
                     hidden: true
