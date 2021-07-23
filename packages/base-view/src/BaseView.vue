@@ -3,6 +3,7 @@
                           @table:row-click="rowClick.apply(_self, arguments)"
                           @fetchTableData="fetchTableData"
                           :table_default-sort.sync="defaultSort"
+                          @table:selection-change="selection = $event"
     >
         <div slot="header-left">
             <category-selector
@@ -105,7 +106,8 @@ export default {
             cancelCategory: null,
             categoryOption: [],
             lastCategory: [],
-            defaultSort: {}
+            defaultSort: {},
+            selection: []
         }, baseData)
     },
     computed: {},
