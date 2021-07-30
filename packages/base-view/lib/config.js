@@ -16,7 +16,8 @@ export default {
                     width: '180',
                     sortable: true, //默认排序配置为 DESC ASC
                     format: function (val) {},
-                    alias: '',
+                    name:'eventTime',   //驼峰命名，别名或下划线二选一
+                    alias: 'EVENT_TIME',    //驼峰转下划线
                     hidden: true
         }*/],
     buttons: [/*{

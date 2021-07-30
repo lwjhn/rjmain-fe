@@ -9,6 +9,6 @@ build-project:
   stage: build
   script:
 #  - yarn install --no-lockfile
-  - yarn run publ
+  - npm run publ
   tags:
   - node

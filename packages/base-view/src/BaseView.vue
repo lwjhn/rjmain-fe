@@ -69,7 +69,8 @@
             >
                 <template slot-scope="scope">
                     {{
-                        typeof (item.format) == 'function' ? item.format.call(_self, item, scope.row) : (scope.row[item.alias])
+                        typeof (item.format) == 'function' ? item.format.call(_self, item, scope.row)
+                            : (scope.row.hasOwnProperty(item.name) ? scope.row[item.name] : scope.row[item.alias])
                     }}
                 </template>
             </el-table-column>
@@ -173,7 +174,7 @@ export default {
                 if (Array.prototype.isPrototypeOf(data)) {
                     let value;
                     data = data.map(o => {
-                        value = o ? o[cat.alias] : o
+                        value = o ? (o.hasOwnProperty(cat.name) ? o[cat.name] : o[cat.alias]) : o
                         if (originDefultValue != null && originDefultValue == value)
                             defultValue = value
                         return {lable: value, value}
@@ -334,7 +335,7 @@ export default {
         },
         init(config) {
             if (!config)
-                throw new Error('BaseView Error :: view must not be null ');
+                throw new Error('BaseView Error :: view must not be null ')
 
             config = $rj.extend(true, {}, config)
             let option
@@ -344,18 +345,23 @@ export default {
                 this[key] = option
             }
 
-            if (this.category) this.category.forEach((o, i) =>
-                o.alias = o.alias ? o.alias.toString() : '_DEF_CAT_' + i)
+            if (this.category)
+                this.category.forEach((o, i) => this.initializeName(o, 'CAT_' + i))
 
             let dSort = {}
             this.columns.forEach((o, i) => {
-                o.alias = o.alias ? o.alias.toString() : '_DEF_COL_' + i
+                this.initializeName(o, 'COL_' + i)
                 if (/des|asc/i.test(o.sortable))
                     dSort = {prop: o.alias, order: /des/i.test(o.sortable) ? 'descending' : 'ascending'}
             })
             if (this.search) this.search.forEach((o, i) =>
                 o.value = undefined)
             this.loadCategory(() => this.defaultSort = dSort)   ////this.refresh(true)
+        },
+        initializeName(o, suffix) {
+            if (!o.alias && o.name)
+                o.alias = $rj.camelToUpperUnderscore(o.name)
+            o.name = $rj.underscoreToLowerCamel(o.alias = o.alias ? o.alias.toString() : '_DEF_' + suffix)
         },
         import(link) {
             if (typeof link === 'string') {

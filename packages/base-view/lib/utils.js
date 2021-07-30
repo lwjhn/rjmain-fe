@@ -47,6 +47,13 @@ export default {
         }
         criteria.expression.push(/^(\s)*\(/.test(expression) ? expression : `(${expression})`)
         return criteria
+    },
+    camelToUpperUnderscore(param) {
+        return param ? param.replace(/([A-Z])/g,'_$1').toLowerCase().replace(/^_+/,'') : param
+    },
+    underscoreToLowerCamel(param) {
+        return param ? param.toLowerCase().replace(/\_+(\w)/g, function(all, letter){
+            return letter.toUpperCase();
+        }) : param
     }
-
 }
