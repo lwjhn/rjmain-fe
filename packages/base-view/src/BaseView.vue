@@ -15,7 +15,7 @@
         <div slot="buttons" v-if="buttons">
             <el-button v-for="(item, index) in buttons"
                        :key="index"
-                       @click="item.handle ? item.handle() : ()=>{}"
+                       @click="item.handle ? item.handle.call(_self) : ()=>{}"
                        :type="item.type ? item.type : 'primary'"
                        :title="item.title ? item.title : ''"
             > {{ item.label ? item.label : `按钮${index}` }}

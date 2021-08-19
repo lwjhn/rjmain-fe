@@ -6,14 +6,14 @@ export default {
                     expression: 'year(eventTime)',
                     //value:[],   //expresion参数
                     label: '事发时间',
-                    width: '80px', //minWidth: 180,
+                    width: '80px',
                     desc: true,
                     //criteria(item){}  //可选
         }*/],
     columns: [/*{
                     expression: 'eventTime',
                     label: '事发时间',
-                    width: '180',
+                    width: '180', //minWidth: 180,
                     sortable: true, //默认排序配置为 DESC ASC
                     format: function (val) {},
                     name:'eventTime',   //驼峰命名，别名或下划线二选一
