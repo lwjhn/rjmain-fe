@@ -147,18 +147,17 @@ export default {
                     value: cat.value
                 }]
             if (fields.length < 1)
-                throw new Error("The number of category cannot be less than 0 .");
-
+                throw new Error("The number of category cannot be less than 0 .")
             let request = {
                 fields,
                 order: [`${cat.alias} ${cat.desc ? 'DESC' : 'ASC'}`],
                 limit: [0, 1000],
-                group: fields[0]
+                group: cat.group ? cat.group : fields[0]
             }
             this.setCategoryCriteria(request, this.lastCategory)
             this.beforeRequest(request, this.lastCategory, true)
 
-            if (this.cancelCategory && typeof this.cancelCategory.cancel === 'function')     // 取消上一次请求
+            if (this.cancelCategory && typeof this.cancelCategory.cancel === 'function')
                 this.cancelCategory.cancel();
             this.cancelCategory = axios.CancelToken.source();
             this.$utils.ajax({

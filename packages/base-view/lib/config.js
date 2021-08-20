@@ -9,6 +9,8 @@ export default {
                     width: '80px',
                     desc: true,
                     //criteria(item){}  //可选
+                    //group //可选
+                    //defaultValue 默认值
         }*/],
     columns: [/*{
                     expression: 'eventTime',
