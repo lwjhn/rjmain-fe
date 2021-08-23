@@ -242,7 +242,7 @@ export default {
                     if (typeof item.criteria === 'function' && ({
                         expression,
                         value
-                    } = item.criteria(item)) && /\?/g.test(expression)) {
+                    } = item.criteria(item)) && expression) {
 
                     } else if (/\?/g.test(expression = item.expression)) {
                         value = item.value
