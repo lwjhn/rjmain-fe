@@ -218,7 +218,7 @@ export default {
                 ? [(sort.order === 'descending' ? `${sort.prop} DESC` : `${sort.prop} ASC`)]
                 : [],
                 limit = [(page - 1) * pageSize, page * pageSize],
-                fields = this.columns.map(o => ({
+                fields = this.columns.filter(o => o && o.expression).map(o => ({
                     expression: o.expression,
                     alias: o.alias,
                     value: o.value
