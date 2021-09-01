@@ -28,19 +28,24 @@ export default {
             type: 'primary',
             handle(){}
     }*/],
-    search: [/*{
-                label: '事发时间',
-                type: 'date',   //date, number, boolean
-                criteria(item){
-                    return item.value ? {
-                        expression: `eventTime>=?${item.length > 1 ? ' AND eventTime<=?' : ''}`,
-                        value: item.value
-                    } : null
-                }
-             }, {
-                label: '报送单位',
-                expression: 'reportUnitName = ?',
-    }*/],
+    search: [
+        /*{
+            label: '事发时间',
+            type: 'date',    //date, number, select, radio, checkbox, other
+            //value: '',
+            criteria(item) {
+                return item.value ? {
+                    expression: `eventTime>=?${item.length > 1 ? ' AND eventTime<=?' : ''}`,
+                    value: item.value
+                } : null
+            },
+            //value:'',
+            //options: [{label,value}]  //select, radio, checkbox使用
+        }, {
+            label: '报送单位',
+            expression: 'reportUnitName = ?', select, radio, checkbox
+        }*/
+    ],
     keyword: '', //eventTime LIKE ?
     rowClick() {
     },

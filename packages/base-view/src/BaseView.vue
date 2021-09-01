@@ -23,28 +23,60 @@
         </div>
         <template slot="search" v-if="search"
                   slot-scope="{where}">
-            <el-form-item v-for="(item, index) in search"
+            <el-form-item class="search-panel-item" v-for="(col, index) in search"
                           :key="index"
-                          :label="item.label"
-                          :prop="item.alias"
-            >
-                <el-date-picker
-                    v-if="item.type === 'date'"
-                    v-model="item.value" @input="forceUpdate()"
-                    type="daterange"
-                    align="right"
-                    unlink-panels
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
+                          :label="col.label"
+                          :prop="col.alias">
+                <el-select v-if="/select/i.test(col.type)" v-model="col.value" filterable
+                           :multiple="col.multiple"
+                           :style="`width: ${col.width ? col.width :　'auto'}`"
+                           placeholder="请选择">
+                    <el-option
+                        v-for="(item, pos) in col.options"
+                        :key="pos"
+                        :label="item.label"
+                        :value="item.value!==undefined ? item.value : item.label">
+                    </el-option>
+                </el-select>
+                <el-checkbox-group v-else-if="/checkbox/i.test(col.type)"
+                                   v-model="col.value"
+                                   :style="`width: ${col.width ? col.width :　'auto'}`">
+                    <el-checkbox
+                        v-for="(item, pos) in col.options"
+                        :key="pos"
+                        :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
+                    </el-checkbox>
+                </el-checkbox-group>
+                <el-radio-group v-else-if="/radio/i.test(col.type)"
+                                v-model="col.value" size="small"
+                                :style="`width: ${col.width ? col.width :　'auto'}`">
+                    <el-radio-button
+                        v-for="(item, pos) in col.options"
+                        :key="pos"
+                        :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
+                    </el-radio-button>
+                </el-radio-group>
+                <el-input-number v-else-if="/number/i.test(col.type)"
+                                 v-model="col.value" controls-position="right"
+                                 :step="typeof col.step === 'number' ? col.step : 1"
+                                 :min="col.min ? col.min : 0"
+                                 :max="col.max ? col.max : 999999999999999"
+                                 :style="`width: ${col.width ? col.width :　'auto'}`"
+                ></el-input-number>
+                <el-date-picker v-else-if="/date/i.test(col.type)"
+                                v-model="col.value"
+                                type="daterange"
+                                align="right"
+                                unlink-panels
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                :style="`width: ${col.width ? col.width :　'auto'}`"
                 >
                 </el-date-picker>
-
-                <el-input
-                    v-else
-                    v-model="item.value" @input="forceUpdate()"
-                    clearable
-                    @keydown.enter.prevent.native></el-input>
+                <el-input v-else v-model="col.value" @input="$forceUpdate()" clearable
+                          :style="`width: ${col.width ? col.width :　'auto'}`"
+                          @keydown.enter.prevent.native></el-input>
             </el-form-item>
         </template>
         <template slot-scope="{pagination}" v-if="columns && columns.length>0">
@@ -204,9 +236,6 @@ export default {
 
             })
         },
-        forceUpdate() {
-            this.$forceUpdate()
-        },
         generateCriteria($this) {
             let page = $this.pagination && $this.pagination.currentPage ? $this.pagination.currentPage : 1,
                 pageSize = $this.pagination.pageSize,
@@ -242,7 +271,7 @@ export default {
                     if (typeof item.criteria === 'function' && ({
                         expression,
                         value
-                    } = item.criteria(item)) && expression) {
+                    } = ((value = item.criteria(item)) ? value : {})) && expression) {
 
                     } else if (/\?/g.test(expression = item.expression)) {
                         value = item.value
@@ -335,6 +364,7 @@ export default {
         init(config) {
             if (!config)
                 throw new Error('BaseView Error :: view must not be null ')
+            const originSearch = config.search
 
             config = $rj.extend(true, {}, config)
             let option
@@ -342,6 +372,10 @@ export default {
                 if (!(option = config[key]))
                     continue
                 this[key] = option
+            }
+            if (originSearch) {
+                originSearch.forEach((o, i) =>
+                    o.hasOwnProperty('options') ? this.search[i].options = o.options : null)
             }
 
             if (this.category)
@@ -353,8 +387,8 @@ export default {
                 if (/des|asc/i.test(o.sortable))
                     dSort = {prop: o.alias, order: /des/i.test(o.sortable) ? 'descending' : 'ascending'}
             })
-            if (this.search) this.search.forEach((o, i) =>
-                o.value = undefined)
+            /*if (this.search) this.search.forEach((o, i) =>
+                o.value = undefined)*/
             this.loadCategory(() => this.defaultSort = dSort)   ////this.refresh(true)
         },
         initializeName(o, suffix) {
@@ -386,3 +420,8 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+.search-panel-item {
+    padding-right: 30px;
+}
+</style>
