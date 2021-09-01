@@ -23,61 +23,11 @@
         </div>
         <template slot="search" v-if="search"
                   slot-scope="{where}">
-            <el-form-item class="search-panel-item" v-for="(col, index) in search"
+            <search-panel class="search-panel-item"
+                          v-for="(col, index) in search"
                           :key="index"
-                          :label="col.label"
-                          :prop="col.alias">
-                <el-select v-if="/select/i.test(col.type)" v-model="col.value" filterable
-                           :multiple="col.multiple"
-                           :style="`width: ${col.width ? col.width :　'auto'}`"
-                           placeholder="请选择">
-                    <el-option
-                        v-for="(item, pos) in col.options"
-                        :key="pos"
-                        :label="item.label"
-                        :value="item.value!==undefined ? item.value : item.label">
-                    </el-option>
-                </el-select>
-                <el-checkbox-group v-else-if="/checkbox/i.test(col.type)"
-                                   v-model="col.value"
-                                   :style="`width: ${col.width ? col.width :　'auto'}`">
-                    <el-checkbox
-                        v-for="(item, pos) in col.options"
-                        :key="pos"
-                        :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
-                    </el-checkbox>
-                </el-checkbox-group>
-                <el-radio-group v-else-if="/radio/i.test(col.type)"
-                                v-model="col.value" size="small"
-                                :style="`width: ${col.width ? col.width :　'auto'}`">
-                    <el-radio-button
-                        v-for="(item, pos) in col.options"
-                        :key="pos"
-                        :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
-                    </el-radio-button>
-                </el-radio-group>
-                <el-input-number v-else-if="/number/i.test(col.type)"
-                                 v-model="col.value" controls-position="right"
-                                 :step="typeof col.step === 'number' ? col.step : 1"
-                                 :min="col.min ? col.min : 0"
-                                 :max="col.max ? col.max : 999999999999999"
-                                 :style="`width: ${col.width ? col.width :　'auto'}`"
-                ></el-input-number>
-                <el-date-picker v-else-if="/date/i.test(col.type)"
-                                v-model="col.value"
-                                type="daterange"
-                                align="right"
-                                unlink-panels
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
-                                :style="`width: ${col.width ? col.width :　'auto'}`"
-                >
-                </el-date-picker>
-                <el-input v-else v-model="col.value" @input="$forceUpdate()" clearable
-                          :style="`width: ${col.width ? col.width :　'auto'}`"
-                          @keydown.enter.prevent.native></el-input>
-            </el-form-item>
+                          :config="col"
+            ></search-panel>
         </template>
         <template slot-scope="{pagination}" v-if="columns && columns.length>0">
             <el-table-column v-if="selection" type="selection"
@@ -110,6 +60,7 @@
     </pagination-table-new>
 </template>
 <script>
+import SearchPanel from "./SearchPanel";
 import CategorySelector from './CategorySelector.vue'
 import baseData from '../lib/config'
 import PaginationTable from 'o-ui/packages/pagination-table'
@@ -131,7 +82,7 @@ const _ALL_CATEGORY_ = () => {
 export default {
     name: 'BaseView',
     props: ['view'],
-    components: {CategorySelector, PaginationTableNew},
+    components: {CategorySelector, PaginationTableNew, SearchPanel},
     data() {
         return $rj.extend(true, {
             lastRequest: null,
