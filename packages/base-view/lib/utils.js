@@ -13,20 +13,22 @@ export default {
      * @param value - Array,String,...
      * @param type - 'AND','OR'
      */
-    sql(query, expression, value, type) {
+    sql(query, expression, value, type, key) {
         let criteria = {
             expression: [],
             value: []
         }
-        if (query.where && query.where.expression) {
-            criteria.expression.push(/^(\s)*\(/.test(query.where.expression) ? query.where.expression : `(${query.where.expression})`)
-            criteria.value = query.where.value
+        if (!key) key = 'where'
+        let where = query[key]
+        if (where && where.expression) {
+            criteria.expression.push(/^(\s)*\(/.test(where.expression) ? where.expression : `(${where.expression})`)
+            if (where.value) criteria.value = where.value
         }
         this.criteria(criteria, expression, value)
-        query.where = {
+        query[key] = Object.assign(where ? where : {}, {
             expression: criteria.expression.join(/^or$/i.test(type) ? ' OR ' : ' AND '),
             value: criteria.value
-        }
+        })
         return query
     },
     /**
@@ -38,6 +40,7 @@ export default {
      * @param value - Array,String,...
      */
     criteria(criteria, expression, value) {
+        if (!criteria.value) criteria.value = []
         let formula = expression.match(/\?/g)
         if (formula) {
             let mode = Array.prototype.isPrototypeOf(value)
