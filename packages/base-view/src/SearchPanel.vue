@@ -8,9 +8,9 @@
                    placeholder="请选择">
             <el-option
                 v-for="(item, pos) in config.options"
-                :key="pos"
+                :key="pos" v-if="item"
                 :label="item.label"
-                :value="item.hasOwnProperty('value') && item.value!==undefined ? item.value : item.label">
+                :value="item.value!==undefined ? item.value : item.label">
             </el-option>
         </el-select>
         <el-checkbox-group v-else-if="/checkbox/i.test(config.type)"
@@ -18,8 +18,8 @@
                            :style="`width: ${config.width ? config.width :　'auto'}`">
             <el-checkbox
                 v-for="(item, pos) in config.options"
-                :key="pos"
-                :label="item.hasOwnProperty('value') && item.value!==undefined ? item.value : item.label">{{ item.label }}
+                :key="pos" v-if="item"
+                :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
             </el-checkbox>
         </el-checkbox-group>
         <el-radio-group v-else-if="/radio/i.test(config.type)"
@@ -27,8 +27,8 @@
                         :style="`width: ${config.width ? config.width :　'auto'}`">
             <el-radio-button
                 v-for="(item, pos) in config.options"
-                :key="pos"
-                :label="item.hasOwnProperty('value') && item.value!==undefined ? item.value : item.label">{{ item.label }}
+                :key="pos" v-if="item"
+                :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
             </el-radio-button>
         </el-radio-group>
         <el-input-number v-else-if="/number/i.test(config.type)"
