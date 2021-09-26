@@ -14,6 +14,8 @@ export default {
      * @param type - 'AND','OR'
      */
     sql(query, expression, value, type, key) {
+        if(!expression)
+            return query
         let criteria = {
             expression: [],
             value: []
@@ -40,6 +42,8 @@ export default {
      * @param value - Array,String,...
      */
     criteria(criteria, expression, value) {
+        if(!expression)
+            return criteria
         if (!criteria.value) criteria.value = []
         let formula = expression.match(/\?/g)
         if (formula) {
