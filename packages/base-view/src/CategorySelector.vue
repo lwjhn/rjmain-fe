@@ -2,7 +2,7 @@
     <ul class="cl-search-category-ul">
         <li class="cl-search-category-li" v-for="(item, index) in options">
             <label>{{ item.label }}：</label>
-            <el-select v-model="item.value"
+            <el-select v-model="item.value" filterable
                        @change="change(item, index)" :style="{
                            width : item.width ? item.width : '100px'
                        }"
