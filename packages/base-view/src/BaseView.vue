@@ -23,11 +23,12 @@
         </div>
         <template slot="search" v-if="search"
                   slot-scope="{where}">
-            <search-panel class="search-panel-item"
-                          v-for="(col, index) in search"
-                          :key="index"
-                          :config="col"
-            ></search-panel>
+                  <div v-for="(col, index) in search" :style="{
+                      display: 'inline-block',
+                      width: col.colSpan ? col.colSpan : '',
+                  }" :key="index">
+                      <search-panel class="search-panel-item" :config="col"></search-panel>
+                  </div>
         </template>
         <template slot-scope="{pagination}" v-if="columns && columns.length>0">
             <el-table-column v-if="selection" type="selection"
@@ -374,5 +375,8 @@ export default {
 <style lang="scss" scoped>
 .search-panel-item {
     padding-right: 30px;
+}
+/deep/ .el-date-editor .el-range-separator{
+    width: 10% !important;
 }
 </style>
