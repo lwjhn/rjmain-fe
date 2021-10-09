@@ -21,15 +21,13 @@
             > {{ item.label ? item.label : `按钮${index}` }}
             </el-button>
         </div>
-        <template slot="search" v-if="search"
-                  slot-scope="{where}">
-                  <div v-for="(col, index) in search" :style="{
-                      display: 'inline-block',
-                      width: col.colSpan ? col.colSpan : '',
-                  }" :key="index">
-                      <search-panel class="search-panel-item" :config="col"></search-panel>
-                  </div>
-        </template>
+        <search-box slot="search" v-if="search" slot-scope="{where}" :search="search"></search-box>
+        <!--        <template slot="search" v-if="search" slot-scope="{where}">
+                          <search-panel class="search-panel-item" :config="col" v-for="(col, index) in search" :style="{
+                              width: col.colSpan ? col.colSpan : '',
+                          }" :key="index">
+                          </search-panel>
+                </template>-->
         <template slot-scope="{pagination}" v-if="columns && columns.length>0">
             <el-table-column v-if="selection" type="selection"
                              width="55">
@@ -61,7 +59,7 @@
     </pagination-table-new>
 </template>
 <script>
-import SearchPanel from "./SearchPanel";
+import SearchBox from "./SearchBox";
 import CategorySelector from './CategorySelector.vue'
 import baseData from '../lib/config'
 import PaginationTable from 'o-ui/packages/pagination-table'
@@ -83,7 +81,7 @@ const _ALL_CATEGORY_ = () => {
 export default {
     name: 'BaseView',
     props: ['view'],
-    components: {CategorySelector, PaginationTableNew, SearchPanel},
+    components: {CategorySelector, PaginationTableNew, SearchBox},
     data() {
         return $rj.extend(true, {
             lastRequest: null,
@@ -373,10 +371,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.search-panel-item {
-    padding-right: 30px;
-}
-/deep/ .el-date-editor .el-range-separator{
-    width: 10% !important;
-}
+
 </style>

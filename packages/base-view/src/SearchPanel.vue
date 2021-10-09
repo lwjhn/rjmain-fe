@@ -1,10 +1,7 @@
 <template>
-    <el-form-item
-        :label="config.label"
-        :prop="config.alias">
+    <el-form-item v-bind="config">
         <el-select v-if="/select/i.test(config.type)" v-model="config.value" filterable
                    :multiple="config.multiple"
-                   :style="`width: ${config.width ? config.width :　'auto'}`"
                    placeholder="请选择">
             <el-option
                 v-for="(item, pos) in config.options"
@@ -14,8 +11,7 @@
             </el-option>
         </el-select>
         <el-checkbox-group v-else-if="/checkbox/i.test(config.type)"
-                           v-model="config.value"
-                           :style="`width: ${config.width ? config.width :　'auto'}`">
+                           v-model="config.value">
             <el-checkbox
                 v-for="(item, pos) in config.options"
                 :key="pos" v-if="item"
@@ -23,17 +19,14 @@
             </el-checkbox>
         </el-checkbox-group>
         <el-radio-group v-else-if="/radiobutton/i.test(config.type)"
-                        v-model="config.value" :size="config.size ? config.size : 'small'"
-                        :style="`width: ${config.width ? config.width :　'auto'}`">
+                        v-model="config.value">
             <el-radio-button
                 v-for="(item, pos) in config.options"
                 :key="pos" v-if="item"
                 :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
             </el-radio-button>
         </el-radio-group>
-        <el-radio-group v-else-if="/radio/i.test(config.type)"
-                        v-model="config.value" :size="config.size ? config.size : 'small'"
-                        :style="`width: ${config.width ? config.width :　'auto'}`">
+        <el-radio-group v-else-if="/radio/i.test(config.type)">
             <el-radio
                 v-for="(item, pos) in config.options"
                 :key="pos" v-if="item"
@@ -45,7 +38,6 @@
                          :step="typeof config.step === 'number' ? config.step : 1"
                          :min="config.min ? config.min : 0"
                          :max="config.max ? config.max : 999999999999999"
-                         :style="`width: ${config.width ? config.width :　'auto'}`"
         ></el-input-number>
         <el-date-picker v-else-if="/date/i.test(config.type)"
                         v-model="config.value"
@@ -55,11 +47,9 @@
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        :style="`width: ${config.width ? config.width :　'auto'}`"
         >
         </el-date-picker>
         <el-input v-else v-model="config.value" @input="$forceUpdate()" clearable
-                  :style="`width: ${config.width ? config.width :　'auto'}`"
                   @keydown.enter.prevent.native></el-input>
     </el-form-item>
 </template>
@@ -74,13 +64,7 @@
         } : null
     },
     type: 'select',   //date, number, select, radio, checkbox, other
-    options: [_ALL_CATEGORY_OPTION_],
-    remote: {
-        expression: `${tableAlias}subscribeYear`,
-        //value:[],   //expresion参数
-        //group: 'subscribeYear', //可选
-        desc: true,
-    }
+    options: [_ALL_CATEGORY_OPTION_]
 }*/
 export default {
     name: "SearchPanel",
