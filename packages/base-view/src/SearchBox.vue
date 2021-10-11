@@ -73,7 +73,7 @@ export default {
             /deep/ .el-form-item__content {
                 width: 100%;
 
-                > * {
+                > * , .el-input-number, .el-input__inner{
                     width: 100%;
                 }
             }
