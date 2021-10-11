@@ -152,7 +152,8 @@ export default {
             }).then(data => {
                 this.afterRequest(request, data, true)
                 data = (Array.prototype.isPrototypeOf(data) ? data : data.list)
-                let defultValue = _ALL_CATEGORY_, originDefultValue = typeof cat.defaultValue === 'function' ? cat.defaultValue(data, cat) : cat.defaultValue
+                let defultValue = _ALL_CATEGORY_,
+                    originDefultValue = typeof cat.defaultValue === 'function' ? cat.defaultValue.call(this, data, cat) : cat.defaultValue
                 if (Array.prototype.isPrototypeOf(data)) {
                     let value;
                     data = data.map(o => {
