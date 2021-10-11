@@ -27,7 +27,7 @@
                 :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
             </el-radio-button>
         </el-radio-group>
-        <el-radio-group v-else-if="/radio/i.test(config.type)" v-bind="config.bind">
+        <el-radio-group v-else-if="/radio/i.test(config.type)" v-model="config.value" v-bind="config.bind">
             <el-radio
                 v-for="(item, pos) in config.options"
                 :key="pos" v-if="item"
