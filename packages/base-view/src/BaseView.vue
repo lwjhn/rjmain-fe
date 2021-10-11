@@ -19,6 +19,7 @@
                        v-bind="item"
             > {{ item.label ? item.label : `按钮${index}` }}
             </el-button>
+            <div class="table-extension-html" v-if="html" v-html="html"></div>
         </div>
         <search-box slot="search" v-if="search" slot-scope="{where}" :search="search"></search-box>
         <!--        <template slot="search" v-if="search" slot-scope="{where}">
@@ -56,7 +57,6 @@
                 </div>
             </el-table-column>
         </template>
-        <div v-if="html" v-html="html"></div>
     </pagination-table-new>
 </template>
 <script>
