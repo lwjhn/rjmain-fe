@@ -48,12 +48,12 @@
                     format: undefined,
                     bind: undefined
                 })">
-                <template slot-scope="scope" v-bind="item.bind">
+                <div slot-scope="scope" v-bind="item.bind">
                     {{
                         typeof (item.format) == 'function' ? item.format.call(_self, item, scope.row)
                             : (scope.row.hasOwnProperty(item.name) ? scope.row[item.name] : scope.row[item.alias])
                     }}
-                </template>
+                </div>
             </el-table-column>
         </template>
         <div v-if="html" v-html="html"></div>
