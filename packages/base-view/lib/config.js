@@ -52,5 +52,6 @@ export default {
     beforeRequest(query, category, isCategory) {
     },
     afterRequest(request, response, isCategory) {
-    }
+    },
+    html: ''
 }

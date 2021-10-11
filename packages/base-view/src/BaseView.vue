@@ -1,5 +1,5 @@
 <template>
-    <pagination-table-new ref="refPagination"
+    <pagination-table-new class="base-pagination-table" ref="refPagination"
                           @table:row-click="rowClick.apply(_self, arguments)"
                           @fetchTableData="fetchTableData"
                           :table_default-sort.sync="defaultSort"
@@ -40,15 +40,16 @@
 
             <el-table-column
                 v-for="(item,index) in columns"
-                :label="item.label"
                 :key="index"
-                :width="item.width ? item.width : ''"
-                :min-width="item.minWidth ? item.minWidth : ''"
-                :sortable="item.sortable ? 'custom' : null"
-                :prop="item.alias"
                 v-if="!item.hidden"
-            >
-                <template slot-scope="scope">
+                v-bind="Object.assign({prop: item.alias}, item, {
+                    sortable: item.sortable ? 'custom' : null,
+                    expression: undefined,
+                    value: undefined,
+                    format: undefined,
+                    bind: undefined
+                })">
+                <template slot-scope="scope" v-bind="item.bind">
                     {{
                         typeof (item.format) == 'function' ? item.format.call(_self, item, scope.row)
                             : (scope.row.hasOwnProperty(item.name) ? scope.row[item.name] : scope.row[item.alias])
@@ -56,6 +57,7 @@
                 </template>
             </el-table-column>
         </template>
+        <div v-if="html" v-html="html"></div>
     </pagination-table-new>
 </template>
 <script>
@@ -151,7 +153,7 @@ export default {
             }).then(data => {
                 this.afterRequest(request, data, true)
                 data = (Array.prototype.isPrototypeOf(data) ? data : data.list)
-                let defultValue = _ALL_CATEGORY_, originDefultValue = cat.defaultValue
+                let defultValue = _ALL_CATEGORY_, originDefultValue = typeof cat.defaultValue === 'function' ? cat.defaultValue(data, cat) : cat.defaultValue
                 if (Array.prototype.isPrototypeOf(data)) {
                     let value;
                     data = data.map(o => {

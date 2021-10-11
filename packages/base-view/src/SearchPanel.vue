@@ -1,6 +1,6 @@
 <template>
     <el-form-item v-bind="Object.assign({}, config, {
-        width: undefined, type: undefined , value: undefined, criteria: undefined
+        width: undefined, type: undefined , value: undefined, criteria: undefined, bind: undefined
     })">
         <el-select v-if="/select/i.test(config.type)" v-model="config.value"
                    v-bind="Object.assign({filterable: true}, config.bind)">
