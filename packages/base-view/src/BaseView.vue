@@ -17,8 +17,8 @@
                        :key="index"
                        @click="item.handle ? item.handle.call(_self) : ()=>{}"
                        v-bind="Object.assign({}, item, {on: undefined, handle: undefined})"
-                       v-on="item.on"
-            > {{ item.label ? item.label : `按钮${index}` }}
+                       v-on="item.on" >
+                {{ item.label ? item.label : `按钮${index}` }}
             </el-button>
             <div class="table-extension-html" v-if="html" v-html="html"></div>
         </div>

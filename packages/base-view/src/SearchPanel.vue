@@ -54,7 +54,7 @@
         >
         </el-date-picker>
         <el-input v-else v-model="config.value" @input="$forceUpdate()" clearable
-                  @keydown.enter.prevent.native  v-bind="config.bind" v-on="config.on"></el-input>
+                  @keydown.enter.prevent.native v-bind="config.bind" v-on="config.on"></el-input>
     </el-form-item>
 </template>
 <script>

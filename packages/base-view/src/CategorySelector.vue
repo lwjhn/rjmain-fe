@@ -12,8 +12,7 @@
                             },
                             noDataText: '无'
                         }, item.bind)"
-                       v-on="item.on"
-            >
+                       v-on="item.on">
                 <el-option v-for="(option, pos) in item.options"
                            :key="'option-'+pos"
                            :label="option.label"
