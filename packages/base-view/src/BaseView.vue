@@ -16,7 +16,8 @@
             <el-button v-for="(item, index) in buttons"
                        :key="index"
                        @click="item.handle ? item.handle.call(_self) : ()=>{}"
-                       v-bind="item"
+                       v-bind="Object.assign({}, item, {on: undefined, handle: undefined})"
+                       v-on="item.on"
             > {{ item.label ? item.label : `按钮${index}` }}
             </el-button>
             <div class="table-extension-html" v-if="html" v-html="html"></div>
@@ -49,7 +50,7 @@
                     format: undefined,
                     bind: undefined
                 })">
-                <div slot-scope="scope" v-bind="item.bind">
+                <div slot-scope="scope" v-bind="item.bind" v-on="item.on">
                     {{
                         typeof (item.format) == 'function' ? item.format.call(_self, item, scope.row)
                             : (scope.row.hasOwnProperty(item.name) ? scope.row[item.name] : scope.row[item.alias])
@@ -174,7 +175,9 @@ export default {
                     label: cat.label,
                     width: cat.width,
                     value: defultValue,
-                    options: data
+                    options: data,
+                    bind: cat.bind,
+                    on: cat.on
                 })
                 if (defultValue !== _ALL_CATEGORY_) {
                     cat.defaultValue = null

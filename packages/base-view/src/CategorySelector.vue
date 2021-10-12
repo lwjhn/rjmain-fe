@@ -2,12 +2,18 @@
     <ul class="cl-search-category-ul">
         <li class="cl-search-category-li" v-for="(item, index) in options">
             <label>{{ item.label }}：</label>
-            <el-select v-model="item.value" filterable
-                       @change="change(item, index)" :style="{
-                           width : item.width ? item.width : '100px'
-                       }"
-                       no-data-text="无"
-                       class="cl-search-category-selector">
+            <el-select v-model="item.value"
+                       @change="change(item, index)"
+                       class="cl-search-category-selector"
+                       v-bind="Object.assign({
+                            filterable: true,
+                            style:{
+                               width : item.width ? item.width : '100px'
+                            },
+                            noDataText: '无'
+                        }, item.bind)"
+                       v-on="item.on"
+            >
                 <el-option v-for="(option, pos) in item.options"
                            :key="'option-'+pos"
                            :label="option.label"

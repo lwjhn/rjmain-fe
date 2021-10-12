@@ -3,6 +3,7 @@
         width: undefined, type: undefined , value: undefined, criteria: undefined, bind: undefined
     })">
         <el-select v-if="/select/i.test(config.type)" v-model="config.value"
+                   v-on="config.on"
                    v-bind="Object.assign({filterable: true}, config.bind)">
             <el-option
                 v-for="(item, pos) in config.options"
@@ -12,7 +13,7 @@
             </el-option>
         </el-select>
         <el-checkbox-group v-else-if="/checkbox/i.test(config.type)"
-                           v-model="config.value" v-bind="config.bind">
+                           v-model="config.value" v-bind="config.bind" v-on="config.on">
             <el-checkbox
                 v-for="(item, pos) in config.options"
                 :key="pos" v-if="item"
@@ -20,14 +21,14 @@
             </el-checkbox>
         </el-checkbox-group>
         <el-radio-group v-else-if="/radiobutton/i.test(config.type)"
-                        v-model="config.value" v-bind="config.bind">
+                        v-model="config.value" v-bind="config.bind" v-on="config.on">
             <el-radio-button
                 v-for="(item, pos) in config.options"
                 :key="pos" v-if="item"
                 :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
             </el-radio-button>
         </el-radio-group>
-        <el-radio-group v-else-if="/radio/i.test(config.type)" v-model="config.value" v-bind="config.bind">
+        <el-radio-group v-else-if="/radio/i.test(config.type)" v-model="config.value" v-bind="config.bind" v-on="config.on">
             <el-radio
                 v-for="(item, pos) in config.options"
                 :key="pos" v-if="item"
@@ -38,7 +39,7 @@
                          v-model="config.value" controls-position="right"
                          v-bind="Object.assign({
                             step: 1, min:0, max: 999999999999999
-                        }, config.bind)"
+                        }, config.bind)" v-on="config.on"
         ></el-input-number>
         <el-date-picker v-else-if="/date/i.test(config.type)"
                         v-model="config.value"
@@ -49,11 +50,11 @@
                             rangeSeparator:'至',
                             startPlaceholder:'开始日期',
                             endPlaceholder:'结束日期'
-                        }, config.bind)"
+                        }, config.bind)" v-on="config.on"
         >
         </el-date-picker>
         <el-input v-else v-model="config.value" @input="$forceUpdate()" clearable
-                  @keydown.enter.prevent.native></el-input>
+                  @keydown.enter.prevent.native  v-bind="config.bind" v-on="config.on"></el-input>
     </el-form-item>
 </template>
 <script>
