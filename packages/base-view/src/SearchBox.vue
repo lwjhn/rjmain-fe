@@ -3,7 +3,8 @@
         <div class="search-panel-col" v-for="(col, index) in search" :key="index" :style="{
             width: col.width ? col.width : 'auto'
         }">
-            <search-panel class="search-panel-item" :config="col"></search-panel>
+            <search-component v-if="typeof col === 'function'" :render-content="col" :config="col"></search-component>
+            <search-panel v-else class="search-panel-item" :config="col"></search-panel>
         </div>
     </div>
 </template>
@@ -33,7 +34,18 @@ import SearchPanel from './SearchPanel'
 
 export default {
     name: "SearchBox",
-    components: {SearchPanel},
+    components: {
+        SearchPanel,
+        SearchComponent: {
+            props: {
+                renderContent: Function,
+                config: Object
+            },
+            render(createElement) {
+                return this.renderContent.call(this, createElement, this.config)
+            }
+        }
+    },
     props: {
         search: {
             type: Array,
@@ -73,16 +85,17 @@ export default {
             /deep/ .el-form-item__content {
                 width: 100%;
 
-                > * , .el-input-number, .el-input__inner{
+                > *, .el-input-number, .el-input__inner {
                     width: 100%;
                 }
             }
-/*
-            &::after {
-                clear: both;
-                width: 30px;
-                display: table-cell;
-            }*/
+
+            /*
+                        &::after {
+                            clear: both;
+                            width: 30px;
+                            display: table-cell;
+                        }*/
         }
     }
 

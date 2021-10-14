@@ -2,7 +2,8 @@
     <el-form-item v-bind="Object.assign({}, config, {
         width: undefined, type: undefined , value: undefined, criteria: undefined, bind: undefined
     })">
-        <el-select v-if="/select/i.test(config.type)" v-model="config.value"
+        <search-component v-if="typeof config.type === 'function'" :render-content="config.type" :config="config"></search-component>
+        <el-select v-else-if="/select/i.test(config.type)" v-model="config.value"
                    v-on="config.on"
                    v-bind="Object.assign({filterable: true}, config.bind)">
             <el-option
@@ -28,7 +29,8 @@
                 :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
             </el-radio-button>
         </el-radio-group>
-        <el-radio-group v-else-if="/radio/i.test(config.type)" v-model="config.value" v-bind="config.bind" v-on="config.on">
+        <el-radio-group v-else-if="/radio/i.test(config.type)" v-model="config.value" v-bind="config.bind"
+                        v-on="config.on">
             <el-radio
                 v-for="(item, pos) in config.options"
                 :key="pos" v-if="item"
@@ -76,6 +78,17 @@ export default {
         config: {
             type: Object,
             request: true
+        }
+    },
+    components: {
+        SearchComponent: {
+            props: {
+                renderContent: Function,
+                config: Object
+            },
+            render(createElement){
+                return this.renderContent.call(this, createElement, this.config)
+            }
         }
     }
 }
