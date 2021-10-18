@@ -140,7 +140,9 @@ export default {
             }
             this.setCategoryCriteria(request, this.lastCategory)
             this.beforeRequest(request, this.lastCategory, true)
-
+            if(typeof cat.beforeRequest === 'function'){
+                cat.beforeRequest.call(this, request, cat)
+            }
             if (this.cancelCategory && typeof this.cancelCategory.cancel === 'function')
                 this.cancelCategory.cancel();
             this.cancelCategory = axios.CancelToken.source();
@@ -179,7 +181,13 @@ export default {
                     bind: cat.bind,
                     on: cat.on
                 })
+                if(typeof cat.beforeRequest === 'function'){
+                    cat.beforeRequest.call(this, request, cat)
+                }
                 if (defultValue !== _ALL_CATEGORY_) {
+                    if(typeof cat.beforeCreate === 'function'){
+                        cat.beforeCreate.call(this, data, this.categoryOption, level)
+                    }
                     cat.defaultValue = null
                     this.changeCategory(data, this.categoryOption, level, callback)
                 } else {
