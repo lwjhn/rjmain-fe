@@ -209,7 +209,7 @@ export default {
             let order = sort && sort.order && sort.prop
                 ? [(sort.order === 'descending' ? `${sort.prop} DESC` : `${sort.prop} ASC`)]
                 : [],
-                limit = [(page - 1) * pageSize, page * pageSize],
+                limit = [(page - 1) * pageSize, pageSize],
                 fields = this.columns.filter(o => o && o.expression).map(o => ({
                     expression: o.expression,
                     alias: o.alias,
