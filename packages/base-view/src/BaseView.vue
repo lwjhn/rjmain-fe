@@ -6,9 +6,9 @@
                           @table:selection-change="selection = $event"
     >
         <div slot="header-left">
-            <category-selector
-                :options="categoryOption"
-                @change="changeCategory"
+            <category-selector v-if="isLoadedCategory"
+                               :options="categoryOption"
+                               @change="changeCategory"
             >
             </category-selector>
         </div>
@@ -17,7 +17,7 @@
                        :key="index"
                        @click="item.handle ? item.handle.call(_self) : ()=>{}"
                        v-bind="Object.assign({}, item, {on: undefined, handle: undefined})"
-                       v-on="item.on" >
+                       v-on="item.on">
                 {{ item.label ? item.label : `按钮${index}` }}
             </el-button>
             <div class="table-extension-html" v-if="html" v-html="html"></div>
@@ -66,7 +66,7 @@ import CategorySelector from './CategorySelector.vue'
 import baseData from '../lib/config'
 import PaginationTable from 'o-ui/packages/pagination-table'
 import $rj from "../lib/utils"
-import axios from 'axios'
+import ajax from "@rongji/rjmain-fe/lib/ajax"
 
 const PaginationTableNew = {
     name: 'PaginationTableNew',
@@ -93,7 +93,9 @@ export default {
             lastCategory: [],
             defaultSort: {},
             selection: []
-        }, baseData)
+        }, baseData, {
+            isLoadedCategory: false, httpRequest: new XMLHttpRequest()
+        })
     },
     computed: {},
     watch: {},
@@ -117,7 +119,9 @@ export default {
                 this.loadCategory(callback)
             } else {
                 this.loadCategory()
-                this.refresh(true)
+                if (this.isLoadedCategory) {
+                    this.refresh(true)
+                }
             }
         },
         loadCategory(callback) {
@@ -140,18 +144,15 @@ export default {
             }
             this.setCategoryCriteria(request, this.lastCategory)
             this.beforeRequest(request, this.lastCategory, true)
-            if(typeof cat.beforeRequest === 'function'){
+            if (typeof cat.beforeRequest === 'function') {
                 cat.beforeRequest.call(this, request, cat)
             }
-            if (this.cancelCategory && typeof this.cancelCategory.cancel === 'function')
-                this.cancelCategory.cancel();
-            this.cancelCategory = axios.CancelToken.source();
-            this.$utils.ajax({
+            ajax({
                 url: this.categoryUrl ? this.categoryUrl : this.url,
                 method: 'post',
                 params: {},
                 data: request,
-                cancelToken: this.cancelCategory.token
+                httpRequest: this.httpRequest
             }).then(data => {
                 this.afterRequest(request, data, true)
                 data = (Array.prototype.isPrototypeOf(data) ? data : data.list)
@@ -181,11 +182,11 @@ export default {
                     bind: cat.bind,
                     on: cat.on
                 })
-                if(typeof cat.beforeRequest === 'function'){
+                if (typeof cat.beforeRequest === 'function') {
                     cat.beforeRequest.call(this, request, cat)
                 }
                 if (defultValue !== _ALL_CATEGORY_) {
-                    if(typeof cat.beforeCreate === 'function'){
+                    if (typeof cat.beforeCreate === 'function') {
                         cat.beforeCreate.call(this, data, this.categoryOption, level)
                     }
                     cat.defaultValue = null
@@ -294,17 +295,13 @@ export default {
                 return this.$message.error(e.message)
             }
 
-            $this.loading = true;
-            if (this.cancelSource && typeof this.cancelSource.cancel === 'function')     // 取消上一次请求
-                this.cancelSource.cancel();
-            this.cancelSource = axios.CancelToken.source();
-
-            this.$utils.ajax({
+            $this.loading = true
+            ajax({
                 url: this.url,
                 method: 'post',
                 params: {},
                 data: request,
-                cancelToken: this.cancelSource.token
+                httpRequest: this.httpRequest
             }).then(response => {
                 this.afterRequest(this.lastRequest = request, response)
                 $this.table.data = response.list    //$this.dataFreeze ? Object.freeze(response.list) : response.list;
@@ -322,7 +319,10 @@ export default {
             })
         },
         refresh(jumpToFirst) {
-            this.$refs.refPagination.refresh(jumpToFirst);
+            let page
+            if (page = this.$refs.refPagination) {
+                page.refresh(jumpToFirst)
+            }
         },
         init(config) {
             if (!config)
@@ -352,7 +352,12 @@ export default {
             })
             /*if (this.search) this.search.forEach((o, i) =>
                 o.value = undefined)*/
-            this.loadCategory(() => this.defaultSort = dSort)   ////this.refresh(true)
+            this.isLoadedCategory = false
+            this.loadCategory(() => {
+                this.defaultSort = dSort
+                this.isLoadedCategory = true
+                this.refresh(true)
+            })
         },
         initializeName(o, suffix) {
             if (!o.alias && o.name)
