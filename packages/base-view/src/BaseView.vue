@@ -4,6 +4,7 @@
                           @fetchTableData="fetchTableData"
                           :table_default-sort.sync="defaultSort"
                           @table:selection-change="selection = $event"
+                          v-bind="bind"
     >
         <div slot="header-left">
             <category-selector v-if="isLoadedCategory"
@@ -358,6 +359,7 @@ export default {
             this.loadCategory(() => {
                 this.defaultSort = dSort
                 this.isLoadedCategory = true
+                //pagination
                 this.refresh(true)
             })
         },

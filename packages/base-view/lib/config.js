@@ -53,5 +53,8 @@ export default {
     },
     afterRequest(request, response, isCategory) {
     },
-    html: ''
+    html: '',
+    bind: {
+        /*pagination_pageSize: 50*/
+    }
 }
