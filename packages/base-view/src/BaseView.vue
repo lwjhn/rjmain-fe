@@ -265,7 +265,9 @@ export default {
                     value: criteria.value
                 }
             }
-            this.setCategoryCriteria(query, this.lastCategory)
+            if(!$this.searchFormVisible){
+                this.setCategoryCriteria(query, this.lastCategory)
+            }
             this.beforeRequest(query, this.lastCategory)
             return query
         },
