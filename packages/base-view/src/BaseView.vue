@@ -94,7 +94,7 @@ export default {
             defaultSort: {},
             selection: []
         }, baseData, {
-            isLoadedCategory: false, httpRequest: new XMLHttpRequest()
+            isLoadedCategory: false, httpRequest: new XMLHttpRequest(), httpRequest4Category: new XMLHttpRequest()
         })
     },
     computed: {},
@@ -152,7 +152,7 @@ export default {
                 method: 'post',
                 params: {},
                 data: request,
-                httpRequest: this.httpRequest
+                httpRequest: this.httpRequest4Category
             }).then(data => {
                 this.afterRequest(request, data, true)
                 data = (Array.prototype.isPrototypeOf(data) ? data : data.list)
