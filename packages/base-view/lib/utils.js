@@ -55,20 +55,27 @@ export default {
         criteria.expression.push(nonBracket || /^(\s)*\(/.test(expression) ? expression : `(${expression})`)
         return criteria
     },
-    sqlAlias2Expression(query, key, callAlias, callExpression) {
+    sqlAlias2Expression(query, key, callAlias, callExpression, appending) {
         let order = query[key]
-        if (!order || (typeof order !== 'string' && !Array.prototype.isPrototypeOf(order)))
+        if ((!order || (typeof order !== 'string' && !Array.prototype.isPrototypeOf(order))) && !appending)
             return query
         let criteria = {
             expression: [],
             value: []
         }, fields = query.fields;
-        (Array.prototype.isPrototypeOf(order) ? order : order.split(/,\s|;\s|,|;/g)).map(key => {
-            let alias = callAlias.call(this, key)
-            let {expression, value} = callExpression.call(this, key, fields.find(item => {
-                return item.alias ? item.alias.trim() === alias : item.expression.trim() === alias
-            }))
-            this.criteria(criteria, expression, value, true)
+        (Array.prototype.isPrototypeOf(appending) ? [order, ...appending] : [order, appending]).forEach(item => {
+            if (!item) {
+            } else if (typeof item !== 'string' && !Array.prototype.isPrototypeOf(item)) {
+                this.criteria(criteria, item.expression, item.value, true)
+            } else {
+                (Array.prototype.isPrototypeOf(item) ? item : item.split(/,\s|;\s|,|;/g)).map(key => {
+                    let alias = callAlias.call(this, key)
+                    let {expression, value} = callExpression.call(this, key, fields.find(item => {
+                        return item.alias ? item.alias.trim() === alias : item.expression.trim() === alias
+                    }))
+                    this.criteria(criteria, expression, value, true)
+                })
+            }
         })
         query[key] = {
             expression: criteria.expression.join(', '),
@@ -76,21 +83,23 @@ export default {
         }
         return query
     },
-    sqlAlias2Expression4Order(query, callExpression) {
+    sqlAlias2Expression4Order(query, callExpression, appending) {
         return this.sqlAlias2Expression(query, 'order',
-            key=> (key = key.trim()).replace(/\s+(asc|desc)$/i, ''),
-            typeof callExpression === 'function' ? callExpression : (key, field)=>{
+            key => (key = key.trim()).replace(/\s+(asc|desc)$/i, ''),
+            typeof callExpression === 'function' ? callExpression : (key, field) => {
                 return {
-                    expression: `${field.expression} ${ /\s+asc$/i.test(key) ? 'ASC' : 'DESC' }`,
+                    expression: `${field.expression} ${/\s+asc$/i.test(key) ? 'ASC' : 'DESC'}`,
                     value: field.value
                 }
-            }
+            },
+            appending
         )
     },
-    sqlAlias2Expression4Group(query, callExpression) {
+    sqlAlias2Expression4Group(query, callExpression, appending) {
         return this.sqlAlias2Expression(query, 'group',
-            key=> key,
-            typeof callExpression === 'function' ? callExpression : (key, field)=>field
+            key => key,
+            typeof callExpression === 'function' ? callExpression : (key, field) => field,
+            appending
         )
     }
 }
