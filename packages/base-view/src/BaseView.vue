@@ -4,7 +4,7 @@
                           @fetchTableData="fetchTableData"
                           :table_default-sort.sync="defaultSort"
                           @table:selection-change="selection = $event"
-                          v-bind="bind"
+                          v-bind="bind" v-on="on"
     >
         <div slot="header-left">
             <category-selector v-if="isLoadedCategory"

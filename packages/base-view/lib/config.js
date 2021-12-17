@@ -47,8 +47,7 @@ export default {
         }*/
     ],
     keyword: '', //eventTime LIKE ?
-    rowClick() {
-    },
+    rowClick() {},
     beforeRequest(query, category, isCategory) {
     },
     afterRequest(request, response, isCategory) {
@@ -56,5 +55,12 @@ export default {
     html: '',
     bind: {
         /*pagination_pageSize: 50*/
+    },
+    on: {
+        /*
+        'table:row-click'(){},
+        'table:row-dblclick'(){},
+        'table:header-click'(){}
+        */
     }
 }
