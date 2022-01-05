@@ -22,10 +22,11 @@
                 {{ item.label ? item.label : `按钮${index}` }}
             </el-button>
             <template v-if="html">
-                <div v-if="Object.prototype.toString.call(html) === '[object String]'" v-html="html" v-bind="html"></div>
+                <div v-if="Object.prototype.toString.call(html) === '[object String]'" v-html="html"
+                     v-bind="Object.assign({}, html.bind)" v-on="html.on"></div>
                 <render-component v-else-if="typeof html === 'function'" :content="html" :config="html"></render-component>
                 <dynamic-component v-else-if="html" :compact="html"
-                                   v-bind="Object.prototype.toString.call(html) === '[object Promise]' ? html : Object.assign({}, html.props, html.attrs)"
+                                   v-bind="Object.assign({}, html.bind)"
                                    v-on="html.on"
                 ></dynamic-component>
             </template>
