@@ -3,7 +3,8 @@
         <div class="search-panel-col" v-for="(col, index) in search" :key="index" :style="{
             width: col.width ? col.width : 'auto'
         }">
-            <search-component v-if="typeof col === 'function'" :render-content="col" :config="col"></search-component>
+            <dynamic-component v-if="Object.prototype.toString.call(col) === '[object Promise]'" :compact="col" v-bind="col"></dynamic-component>
+            <render-component v-else-if="typeof col === 'function'" :content="col" :config="col"></render-component>
             <search-panel v-else class="search-panel-item" :config="col"></search-panel>
         </div>
     </div>
@@ -31,20 +32,15 @@
 }]*/
 
 import SearchPanel from './SearchPanel'
+import DynamicComponent from '../../dynamic-component'
+import RenderComponent from '../../render-component'
 
 export default {
     name: "SearchBox",
     components: {
         SearchPanel,
-        SearchComponent: {
-            props: {
-                renderContent: Function,
-                config: Object
-            },
-            render(createElement) {
-                return this.renderContent.call(this, createElement, this.config)
-            }
-        }
+        RenderComponent,
+        DynamicComponent
     },
     props: {
         search: {

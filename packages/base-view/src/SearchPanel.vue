@@ -2,7 +2,8 @@
     <el-form-item v-bind="Object.assign({}, config, {
         width: undefined, type: undefined , value: undefined, criteria: undefined, bind: undefined
     })">
-        <search-component v-if="typeof config.type === 'function'" :render-content="config.type" :config="config"></search-component>
+        <dynamic-component v-if="Object.prototype.toString.call(config.type) === '[object Promise]'" :compact="config.type" v-bind="config.type"></dynamic-component>
+        <render-component v-else-if="typeof config.type === 'function'" :content="config.type" :config="config"></render-component>
         <el-select v-else-if="/select/i.test(config.type)" v-model="config.value"
                    v-on="config.on"
                    v-bind="Object.assign({filterable: true}, config.bind)">
@@ -72,6 +73,9 @@
     type: 'select',   //date, number, select, radio, checkbox, other
     options: [_ALL_CATEGORY_OPTION_]
 }*/
+import DynamicComponent from '../../dynamic-component'
+import RenderComponent from '../../render-component'
+
 export default {
     name: "SearchPanel",
     props: {
@@ -81,15 +85,8 @@ export default {
         }
     },
     components: {
-        SearchComponent: {
-            props: {
-                renderContent: Function,
-                config: Object
-            },
-            render(createElement){
-                return this.renderContent.call(this, createElement, this.config)
-            }
-        }
+        RenderComponent,
+        DynamicComponent
     }
 }
 </script>

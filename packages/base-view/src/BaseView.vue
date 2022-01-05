@@ -22,10 +22,12 @@
                 {{ item.label ? item.label : `按钮${index}` }}
             </el-button>
             <template v-if="html">
-                <div v-if="Object.prototype.toString.call(html) === '[object String]'" v-html="html" v-bind="html.config"></div>
-                <dynamic-component v-else-if="Object.prototype.toString.call(html) === '[object Function]'" :render-content="html"
-                                   :config="html.config"></dynamic-component>
-                <component v-else v-bind:is="html" v-bind="html.config"></component>
+                <div v-if="Object.prototype.toString.call(html) === '[object String]'" v-html="html" v-bind="html"></div>
+                <render-component v-else-if="typeof html === 'function'" :content="html" :config="html"></render-component>
+                <dynamic-component v-else-if="html" :compact="html"
+                                   v-bind="Object.prototype.toString.call(html) === '[object Promise]' ? html : Object.assign({}, html.props, html.attrs)"
+                                   v-on="html.on"
+                ></dynamic-component>
             </template>
         </div>
         <search-box slot="search" v-if="search" slot-scope="{where}" :search="search"></search-box>
@@ -73,6 +75,8 @@ import baseData from '../lib/config'
 import PaginationTable from 'o-ui/packages/pagination-table'
 import $rj from "../lib/utils"
 import ajax from "@rongji/rjmain-fe/lib/ajax"
+import DynamicComponent from '../../dynamic-component'
+import RenderComponent from '../../render-component'
 
 const PaginationTableNew = {
     name: 'PaginationTableNew',
@@ -90,15 +94,7 @@ export default {
     name: 'BaseView',
     props: ['view'],
     components: {
-        CategorySelector, PaginationTableNew, SearchBox, DynamicComponent: {
-            props: {
-                renderContent: Function,
-                config: Object
-            },
-            render(createElement) {
-                return this.renderContent.call(this, createElement, this.config)
-            }
-        }
+        CategorySelector, PaginationTableNew, SearchBox, DynamicComponent, RenderComponent
     },
     data() {
         return $rj.extend(true, {
