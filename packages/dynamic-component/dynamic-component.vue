@@ -1,6 +1,6 @@
 <template>
     <keep-alive>
-        <component v-bind:is="currentComponent" v-bind="$attrs" v-on="$on"></component>
+        <component v-bind:is="currentComponent" v-bind="$attrs" v-on="$listeners"></component>
     </keep-alive>
 </template>
 
@@ -17,15 +17,20 @@ export default {
     },
     watch: {
         compact(compact) {
-            if (Promise.prototype.isPrototypeOf(compact)) {
-                compact.then(comp => this.currentComponent = comp).catch(err => console.error(err))
+            this.load()
+        }
+    },
+    methods: {
+        load(){
+            if (Promise.prototype.isPrototypeOf(this.compact)) {
+                this.compact.then(comp => this.currentComponent = comp).catch(err => console.error(err))
             } else {
-                this.currentComponent = compact ? compact : ''
+                this.currentComponent = this.compact ? this.compact : ''
             }
         }
     },
     created() {
-
+        this.load()
     }
 }
 </script>

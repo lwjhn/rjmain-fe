@@ -2,7 +2,7 @@
     <el-form-item v-bind="Object.assign({}, config, {
         width: undefined, type: undefined , value: undefined, criteria: undefined, bind: undefined
     })">
-        <dynamic-component v-if="Object.prototype.toString.call(config.type) === '[object Promise]'" :compact="config.type" v-bind="config.bind" v-on="config.on"></dynamic-component>
+        <dynamic-component v-if="config.type && typeof config.type !== 'function' && typeof config.type !== 'string'" :compact="config.type" v-bind="config.bind" v-on="config.on"></dynamic-component>
         <render-component v-else-if="typeof config.type === 'function'" :content="config.type" :config="config"></render-component>
         <el-select v-else-if="/select/i.test(config.type)" v-model="config.value"
                    v-on="config.on"
