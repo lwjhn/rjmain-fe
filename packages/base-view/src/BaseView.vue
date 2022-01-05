@@ -21,7 +21,12 @@
                        v-on="item.on">
                 {{ item.label ? item.label : `按钮${index}` }}
             </el-button>
-            <div class="table-extension-html" v-if="html" v-html="html"></div>
+            <template v-if="html">
+                <div v-if="Object.prototype.toString.call(html) === '[object String]'" v-html="html" v-bind="html.config"></div>
+                <dynamic-component v-else-if="Object.prototype.toString.call(html) === '[object Function]'" :render-content="html"
+                                   :config="html.config"></dynamic-component>
+                <component v-else v-bind:is="html" v-bind="html.config"></component>
+            </template>
         </div>
         <search-box slot="search" v-if="search" slot-scope="{where}" :search="search"></search-box>
         <!--        <template slot="search" v-if="search" slot-scope="{where}">
@@ -84,7 +89,17 @@ const _ALL_CATEGORY_ = () => {
 export default {
     name: 'BaseView',
     props: ['view'],
-    components: {CategorySelector, PaginationTableNew, SearchBox},
+    components: {
+        CategorySelector, PaginationTableNew, SearchBox, DynamicComponent: {
+            props: {
+                renderContent: Function,
+                config: Object
+            },
+            render(createElement) {
+                return this.renderContent.call(this, createElement, this.config)
+            }
+        }
+    },
     data() {
         return $rj.extend(true, {
             lastRequest: null,
@@ -266,7 +281,7 @@ export default {
                     value: criteria.value
                 }
             }
-            if(!$this.searchFormVisible){
+            if (!$this.searchFormVisible) {
                 this.setCategoryCriteria(query, this.lastCategory)
             }
             this.beforeRequest(query, this.lastCategory)
