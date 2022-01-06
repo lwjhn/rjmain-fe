@@ -2,8 +2,10 @@
     <el-form-item v-bind="Object.assign({}, config, {
         width: undefined, type: undefined , value: undefined, criteria: undefined, bind: undefined
     })">
-        <dynamic-component v-if="config.type && typeof config.type !== 'function' && typeof config.type !== 'string'" :compact="config.type" v-bind="config.bind" v-on="config.on"></dynamic-component>
-        <render-component v-else-if="typeof config.type === 'function'" :content="config.type" :config="config"></render-component>
+        <dynamic-component v-if="config.type && typeof config.type !== 'function' && typeof config.type !== 'string'"
+                           :compact="config.type" v-bind="config.bind" v-on="config.on"></dynamic-component>
+        <render-component v-else-if="typeof config.type === 'function'" :content="config.type"
+                          :config="config"></render-component>
         <el-select v-else-if="/select/i.test(config.type)" v-model="config.value"
                    v-on="config.on"
                    v-bind="Object.assign({filterable: true}, config.bind)">
@@ -57,7 +59,9 @@
         >
         </el-date-picker>
         <i-date-range v-else-if="/date/i.test(config.type)"
-                    v-model="config.value" v-bind="config.bind" v-on="config.on"><template>-</template></i-date-range>
+                      v-model="config.value" v-bind="config.bind" v-on="config.on">
+            {{ config.bind && config.bind.rangeSeparator ? config.bind.rangeSeparator : '-' }}
+        </i-date-range>
         <el-input v-else v-model="config.value" @input="$forceUpdate()" clearable
                   @keydown.enter.prevent.native v-bind="config.bind" v-on="config.on"></el-input>
     </el-form-item>

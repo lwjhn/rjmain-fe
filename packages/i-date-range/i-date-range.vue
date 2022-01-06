@@ -24,7 +24,8 @@ export default {
         bind0: Object,
         on0: Object,
         bind1: Object,
-        on1: Object
+        on1: Object,
+        rangeSeparator: String
     },
     data() {
         return {
@@ -45,6 +46,10 @@ export default {
 
     div {
         flex-grow: 2;
+    }
+
+    span {
+        padding: 0 6px;
     }
 }
 </style>
