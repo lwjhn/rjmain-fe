@@ -44,7 +44,7 @@
                             step: 1, min:0, max: 999999999999999
                         }, config.bind)" v-on="config.on"
         ></el-input-number>
-        <el-date-picker v-else-if="/date/i.test(config.type)"
+        <el-date-picker v-else-if="/datepicker/i.test(config.type)"
                         v-model="config.value"
                         v-bind="Object.assign({
                             type:'daterange',
@@ -56,6 +56,8 @@
                         }, config.bind)" v-on="config.on"
         >
         </el-date-picker>
+        <i-date-range v-else-if="/date/i.test(config.type)"
+                    v-model="config.value" v-bind="config.bind" v-on="config.on"><template>-</template></i-date-range>
         <el-input v-else v-model="config.value" @input="$forceUpdate()" clearable
                   @keydown.enter.prevent.native v-bind="config.bind" v-on="config.on"></el-input>
     </el-form-item>
@@ -75,6 +77,7 @@
 }*/
 import DynamicComponent from '../../dynamic-component'
 import RenderComponent from '../../render-component'
+import IDateRange from '../../i-date-range'
 
 export default {
     name: "SearchPanel",
@@ -86,7 +89,8 @@ export default {
     },
     components: {
         RenderComponent,
-        DynamicComponent
+        DynamicComponent,
+        IDateRange
     }
 }
 </script>
