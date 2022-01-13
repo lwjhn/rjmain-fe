@@ -24,7 +24,8 @@
             <template v-if="html">
                 <div v-if="Object.prototype.toString.call(html) === '[object String]'" v-html="html"
                      v-bind="Object.assign({}, html.bind)" v-on="html.on"></div>
-                <render-component v-else-if="typeof html === 'function'" :content="html" :config="html"></render-component>
+                <render-component v-else-if="typeof html === 'function'" :content="html"
+                                  :config="html"></render-component>
                 <dynamic-component v-else-if="html" :compact="html"
                                    v-bind="Object.assign({}, html.bind)"
                                    v-on="html.on"
@@ -248,7 +249,7 @@ export default {
                     if (typeof item.criteria === 'function' && ({
                         expression,
                         value
-                    } = ((value = item.criteria(item)) ? value : {})) && expression) {
+                    } = ((value = item.criteria.call(this, item)) ? value : {})) && expression) {
 
                     } else if (/\?/g.test(expression = item.expression)) {
                         value = item.value
