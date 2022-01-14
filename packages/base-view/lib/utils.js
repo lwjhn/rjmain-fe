@@ -101,5 +101,26 @@ export default {
             typeof callExpression === 'function' ? callExpression : (key, field) => field,
             appending
         )
+    },
+    date2Criteria(expression, value, template) {
+        if (!Array.prototype.isPrototypeOf(value) || value.length < 1)
+            return null
+        if (!template) {
+            template = [{operator: '>=', format: 'yyyy-MM-dd 00:00:00.000000'}, {
+                operator: '<=',
+                format: 'yyyy-M-d 23:59:59.999999'
+            }]
+        }
+        let exp = [], val = []
+        value.forEach((dateTime, index) => {
+            if (!!(dateTime = this.string2Date(dateTime))) {
+                exp.push(`${expression} ${template[index].operator} ?`)
+                val.push(this.formatDate(dateTime, template[index].format))
+            }
+        })
+        return {
+            expression: exp.join(' AND '),
+            value: val
+        }
     }
 }
