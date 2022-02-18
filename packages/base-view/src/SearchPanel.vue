@@ -62,6 +62,10 @@
                       v-model="config.value" v-bind="config.bind" v-on="config.on">
             {{ config.bind && config.bind.rangeSeparator ? config.bind.rangeSeparator : '-' }}
         </i-date-range>
+        <i-number-range v-else-if="/numberrange/i.test(config.type)"
+                      v-model="config.value" v-bind="config.bind" v-on="config.on">
+            {{ config.bind && config.bind.rangeSeparator ? config.bind.rangeSeparator : '-' }}
+        </i-number-range>
         <el-input v-else v-model="config.value" @input="$forceUpdate()" clearable
                   @keydown.enter.prevent.native v-bind="config.bind" v-on="config.on"></el-input>
     </el-form-item>

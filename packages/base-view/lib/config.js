@@ -31,7 +31,7 @@ export default {
     search: [
         /*{
             label: '事发时间',
-            type: 'date',    //date, number, select, radio, checkbox, other
+            type: 'date',    //date, number, select, radio, checkbox, numberrange, datepicker, other
             //value: '',
             criteria(item) {
                 return item.value ? {
