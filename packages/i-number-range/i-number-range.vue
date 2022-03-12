@@ -25,7 +25,7 @@ export default {
     },
     data() {
         return {
-            currentValue: (Array.prototype.isPrototypeOf(this.value) ? this.value : []).concat([null, null]).slice(0, 2)
+            currentValue: (Array.prototype.isPrototypeOf(this.value) ? this.value : []).concat([undefined, undefined]).slice(0, 2)
         }
     },
     watch: {
