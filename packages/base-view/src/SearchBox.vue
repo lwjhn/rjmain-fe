@@ -61,6 +61,7 @@ export default {
         .el-form-item.search-panel-item {
             display: inline-table !important;
             width: 100%;
+            margin: 0 5px;
 
             /deep/ label.el-form-item__label {
                 width: 100px;
