@@ -40,6 +40,10 @@
                 :label="item.value!==undefined ? item.value : item.label">{{ item.label }}
             </el-radio>
         </el-radio-group>
+        <i-number-range v-else-if="/numberrange/i.test(config.type)"
+                        v-model="config.value" v-bind="config.bind" v-on="config.on">
+            {{ config.bind && config.bind.rangeSeparator ? config.bind.rangeSeparator : '-' }}
+        </i-number-range>
         <el-input-number v-else-if="/number/i.test(config.type)"
                          v-model="config.value" controls-position="right"
                          v-bind="Object.assign({
@@ -62,10 +66,6 @@
                       v-model="config.value" v-bind="config.bind" v-on="config.on">
             {{ config.bind && config.bind.rangeSeparator ? config.bind.rangeSeparator : '-' }}
         </i-date-range>
-        <i-number-range v-else-if="/numberrange/i.test(config.type)"
-                      v-model="config.value" v-bind="config.bind" v-on="config.on">
-            {{ config.bind && config.bind.rangeSeparator ? config.bind.rangeSeparator : '-' }}
-        </i-number-range>
         <el-input v-else v-model="config.value" @input="$forceUpdate()" clearable
                   @keydown.enter.prevent.native v-bind="config.bind" v-on="config.on"></el-input>
     </el-form-item>
