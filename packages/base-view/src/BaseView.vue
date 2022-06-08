@@ -330,6 +330,7 @@ export default {
                     })
                 })
             }).catch(err => {
+                Object.assign($this.pagination, $this.paginationPropsCopy)
                 this.$message.error(err.message)
             }).finally(() => {
                 $this.loading = false;
