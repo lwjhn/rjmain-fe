@@ -320,9 +320,9 @@ export default {
                 httpRequest: this.httpRequest
             }).then(response => {
                 this.afterRequest(this.lastRequest = request, response)
-                $this.table.data = response.list    //$this.dataFreeze ? Object.freeze(response.list) : response.list;
                 $this.pagination.total = parseInt(response.total)
-                $this.paginationPropsCopy = $this.pagination
+                $this.paginationPropsCopy = $rj.extend(true, {}, $this.pagination)
+                $this.table.data = response.list    //$this.dataFreeze ? Object.freeze(response.list) : response.list;
                 this.$nextTick(() => {
                     $('.el-table-column--selection').click((e) => {
                         e.stopPropagation()
