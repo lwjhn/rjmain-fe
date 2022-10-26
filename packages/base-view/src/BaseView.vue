@@ -222,8 +222,8 @@ export default {
                 sort = $this.table && $this.table.defaultSort ? $this.table.defaultSort : null
 
             let order = sort && sort.order && sort.prop
-                ? [(sort.order === 'descending' ? `${sort.prop} DESC` : `${sort.prop} ASC`)]
-                : [],
+                    ? [(sort.order === 'descending' ? `${sort.prop} DESC` : `${sort.prop} ASC`)]
+                    : [],
                 limit = [(page - 1) * pageSize, pageSize],
                 fields = this.columns.filter(o => o && o.expression).map(o => ({
                     expression: o.expression,
@@ -245,7 +245,7 @@ export default {
             if ($this.searchFormVisible) {  // 高级搜索表单显示
                 let value
                 this.search.forEach(item => {
-                    if (!item.value) return
+                    if (item.value === undefined) return
                     if (typeof item.criteria === 'function' && ({
                         expression,
                         value
